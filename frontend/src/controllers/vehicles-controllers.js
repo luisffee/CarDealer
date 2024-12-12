@@ -4,7 +4,7 @@ import axios from 'axios'
 async function getVehicles() {
     try{
         const response = await axios.get(`${BASE_API}/vehicle/getVehicles`)
-        return response
+        return response.data
     }catch(error){
         console.log('Erro ao buscar veiculos: ', error)
     }
@@ -38,5 +38,19 @@ async function editVehicle(id, id_model, year_car, state_car, mileage_car, image
     }
 }
 
+async function addVehicle(formData) {
+    try {
+        // Envia o formData para o backend
+        const response = await axios.post(`${BASE_API}/vehicle/add`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Necessário para envio de arquivos
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao adicionar veículo: ', error);
+        throw error;
+    }
+}
 
-export {getVehicles, deleteVehicle, editVehicle}
+export {getVehicles, deleteVehicle, editVehicle, addVehicle}
