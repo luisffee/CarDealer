@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import InputMask from "react-input-mask";
 import { registerUser } from "../controllers/user-controllers";
+import { useNavigate } from 'react-router-dom'
+
 const UserRegister = () => {
   const [cpfCnpj, setCpfCnpj] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+
+  const navigate = useNavigate()
 
   const handleCpfCnpjChange = (value) => {
     setCpfCnpj(value);
@@ -38,6 +42,7 @@ const UserRegister = () => {
   
       // Pode tratar a resposta aqui (ex. redirecionar ou mostrar uma mensagem)
       console.log('Usuário registrado com sucesso:', response);
+      navigate('/home')
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
     }
