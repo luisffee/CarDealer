@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, url_for, redirect, render_template
+from flask import Blueprint, request, jsonify, url_for, redirect, render_template, session
 from .models import User, UserCPF, UserCNPJ
 from ...db import db
 
@@ -64,7 +64,21 @@ def registerUser():
         return jsonify({'message': 'User created successfully'}), 201
 
     return render_template('auth/register.html')
-@auth_bp.route('/login', methods=['GET', 'POST'])
 
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    return render_template('auth/login.html')
+    if request.method == 'POST':
+        data = request.json  # Parse JSON data from the request
+        email = data.get('email')
+        password = data.get('password')
+        user = User.query.filter_by(email=email).first()
+        if user and password==user.password:
+            session['user_id'] = user.id
+            return jsonify({'message': 'Login successful'}), 200
+        else:
+            return jsonify({'message': 'Invalid email or password'}), 401
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    session.pop('user_id', None)
+    return jsonify({'message': 'Logged out successfully'}), 200
