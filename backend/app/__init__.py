@@ -14,6 +14,10 @@ def create_app(app_config='development'):
     app.config['SQLALCHEMY_DATABASE_URI'] = db.engine.url
     db = db.start()
     
+    from .routes.auth.models import User, UserCPF, UserCNPJ
+    from .routes.vehicle.models import Vehicle, Brand, Models
+    from .routes.product.models import Product
+    
     with app.app_context():
         db.create_all()
     
